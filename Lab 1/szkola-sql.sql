@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2024 at 09:27 AM
+-- Generation Time: Jun 04, 2024 at 05:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -25,7 +25,80 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetStudentsByClassSymbol` (IN `class_symbol` VARCHAR(10))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z01_Uczniowie_klas_1_3` ()   BEGIN
+  SELECT Uczniowie.Nazwisko, Uczniowie.Imie, Uczniowie.IdU, Klasy.Symbol
+  FROM Klasy
+  INNER JOIN Uczniowie ON Klasy.Symbol = Uczniowie.KlasaU
+  WHERE Klasy.Symbol LIKE 'I%' OR Klasy.Symbol LIKE 'II%' OR Klasy.Symbol LIKE 'III%';
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z02_Uczniowe_klas_2_miasta_C_P` ()   BEGIN
+  SELECT Uczniowie.IdU, Uczniowie.Nazwisko, Uczniowie.Imie, Uczniowie.DUr, Uczniowie.Plec, Klasy.Symbol, Miasta.NazwaM
+  FROM Klasy
+  INNER JOIN Uczniowie ON Klasy.Symbol = Uczniowie.KlasaU
+  INNER JOIN Miasta ON Miasta.IdM = Uczniowie.MiastoU
+  WHERE Klasy.Symbol LIKE 'II%' AND Miasta.NazwaM REGEXP '^[C-P]'
+  ORDER BY Uczniowie.Nazwisko, Uczniowie.Imie;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z04_Nauczyciele_od_1_03_2020` ()   BEGIN
+  SELECT Nauczyciele.IdN, Nauczyciele.Nazwisko, Nauczyciele.Imie, Nauczyciele.DZatr, Nauczyciele.DUr, Nauczyciele.Plec, Nauczyciele.Pensja, Nauczyciele.Pensum, Nauczyciele.Telefon, Nauczyciele.Premia
+  FROM Nauczyciele
+  WHERE Nauczyciele.DZatr >= '2020-03-01';
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z06_Nauczyciele_sortowani` ()   BEGIN
+  SELECT Nauczyciele.*
+  FROM Nauczyciele
+  ORDER BY Nauczyciele.Nazwisko, Nauczyciele.Imie, Nauczyciele.DUr DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z09_Uczniowie_srednia_ocen` ()   BEGIN
+    SELECT Uczniowie.IdU, Uczniowie.Nazwisko, Uczniowie.Imie, ROUND(AVG(Oceny.Ocena),2) AS Średnia_ocen
+    FROM Uczniowie
+    INNER JOIN Oceny ON Uczniowie.IdU = Oceny.IdU
+    GROUP BY Uczniowie.IdU, Uczniowie.Nazwisko, Uczniowie.Imie;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z11_Ucziowie_Brzeg_Oława` ()   BEGIN
+  SELECT Uczniowie.IdU AS Numer, Uczniowie.Nazwisko, Uczniowie.Imie, Miasta.NazwaM
+  FROM Miasta
+  INNER JOIN Uczniowie ON Miasta.IdM = Uczniowie.MiastoU
+  WHERE Miasta.NazwaM IN ('Brzeg', 'Oława', 'Brzeg dolny');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z12_Miasta_z_uczniami` ()   BEGIN
+  SELECT Miasta.NazwaM
+  FROM Miasta INNER JOIN Uczniowie ON Miasta.IdM = Uczniowie.MiastoU
+  GROUP BY Miasta.NazwaM;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z14_Ilosc_uczniow_z_miast` ()   BEGIN
+    SELECT Miasta.NazwaM, COUNT(Uczniowie.IdU) AS Liczba_Uczniow
+    FROM Miasta
+    LEFT JOIN Uczniowie ON Miasta.IdM = Uczniowie.MiastoU
+    GROUP BY Miasta.NazwaM
+    ORDER BY Liczba_Uczniow DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z20_z_ilu_przedmiotow_uczen_ma_ocene` ()   BEGIN
+    SELECT Uczniowie.IdU, Uczniowie.Nazwisko, Uczniowie.Imie, COUNT(Oceny.IdP) AS Liczba_Przedmiotow
+    FROM Uczniowie
+    INNER JOIN Oceny ON Uczniowie.IdU = Oceny.IdU
+    GROUP BY Uczniowie.IdU, Uczniowie.Nazwisko, Uczniowie.Imie
+    ORDER BY Liczba_Przedmiotow DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `L2z23_Nagroda_dochód` ()   BEGIN
+    SELECT CONCAT(Nazwisko, ' ', Imie) AS `Nazwisko i imię`,
+           CAST(Pensja AS DECIMAL(10,2)) AS pensja,
+           CAST(ROUND(Pensja * 0.2, 2) AS DECIMAL(10,2)) AS Nagroda,
+           CAST(ROUND(Pensja * 1.2, 2) AS DECIMAL(10,2)) AS Dochód
+    FROM Nauczyciele
+    ORDER BY CAST(ROUND(Pensja * 1.2, 2) AS DECIMAL(10,2)) DESC, CONCAT(Nazwisko, ' ', Imie);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Parametryczna_Studenci_symbol_klasy` (IN `class_symbol` VARCHAR(10))   BEGIN
     SELECT Uczniowie.*
     FROM Klasy
     INNER JOIN Uczniowie ON Klasy.Symbol = Uczniowie.KlasaU
