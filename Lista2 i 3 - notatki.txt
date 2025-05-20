@@ -1,0 +1,44 @@
+Lista 3:
+10 kwerend na 10 procedur
+Eksport tabel do pośredniego formatu, uważać żeby nie zgubić powiązań.
+Klucze główne i kandydujące zachowane
+Obligatoryjność i opcjonalność pól zachowana.
+Przynajmniej jedna kwerenda parametryczna.
+Możliwe że będzie można oddać na następnych zajęciach.
+W pliku jest opisane jak nie zgubić powiązań
+More > Designer na bazie wyświetla powiązania, powinny być linie jak w accessie
+Dodawanie indexu wszędzie pomaga na tworzenie relacji
+
+Większość procedur jest w szkola-sql > SQL > na dole jest bookmarked queries
+Procedura parametryczna jest w routines, trzeba dać execute
+
+Lista 2:
+Każde zadanie tylko jedną kwerendą, wszystkie zadania muszą być zrobione, nawet jeśli źle.
+
+Nazwa kwerendy L2z01... czyli L2, numer zadania, krótki opis
+
+Zadanie 7 kwerenda a i kwerenda b.
+
+"Dane ucznia" znaczy wyświetl wszystko.
+
+ID zawsze musi być jeśli wyświetlamy nazwisko.
+
+Bierzemy dane zawsze z oryginalnej tabeli.
+
+W zadaniu 24 nadgodziny mogą być ujemne, pole puste jeśli nie ma pensum.
+
+Musi być każdy przypadek, ujemne, dodatnie, zero, brak
+
+W zadaniu 23 używamy wyrażeń do nagrody i dochodu.
+
+Nie używać nazw wyrażeń tylko pisać od nowa w innych polach.
+
+Pola po których szukamy zawsze pokazujemy żeby móc sprawdzić czy dobrze wyszukało.
+
+To co wpisujemy z klawiatury jest tekstem, konwertujemy INT().
+
+Zadania 34 i 35 piszemy w SQL.
+
+W zadaniu 36 tabela, na jednej osi nazwy przedmiotów a na drugiej oceny.
+
+Nie trzeba pokazywać nazw przedmiotów bez ocen.
